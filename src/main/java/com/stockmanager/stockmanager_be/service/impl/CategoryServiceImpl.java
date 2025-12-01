@@ -88,4 +88,20 @@ public class CategoryServiceImpl implements CategoryService {
             throw new RuntimeException("Failed to get all categories " + e.getMessage() );
         }
     }
+
+    @Override
+    public CategoryResponseDto findCategoryByName(String categoryName) {
+        try {
+            Optional<Category> category = categoryRepo.findByName(categoryName);
+            if (category.isPresent()) {
+                return categoryMapper.toCategoryResponseDto(category.get());
+            } else {
+                throw new CategoryNotFoundException("Category not found with name: " + categoryName);
+            }
+        } catch (CategoryNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get Category " + e.getMessage());
+        }
+    }
 }

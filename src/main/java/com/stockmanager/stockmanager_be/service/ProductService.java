@@ -1,5 +1,6 @@
 package com.stockmanager.stockmanager_be.service;
 
+import com.stockmanager.stockmanager_be.dto.ProductBulkDto;
 import com.stockmanager.stockmanager_be.dto.ProductCreateDto;
 import com.stockmanager.stockmanager_be.dto.ProductResponseDto;
 import com.stockmanager.stockmanager_be.dto.ProductUpdateDto;
@@ -13,5 +14,5 @@ public interface ProductService {
     ProductResponseDto getProductById(int productId);
     List<ProductResponseDto> getAllProducts();
     int deleteProduct(int productId);
-    int saveProductList(List<ProductCreateDto> productCreateDtoList);
+    int saveProductList(List<ProductBulkDto> productBulkDtoList);
 }

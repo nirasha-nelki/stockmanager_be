@@ -1,5 +1,6 @@
 package com.stockmanager.stockmanager_be.mapper;
 
+import com.stockmanager.stockmanager_be.dto.ProductBulkDto;
 import com.stockmanager.stockmanager_be.dto.ProductCreateDto;
 import com.stockmanager.stockmanager_be.dto.ProductResponseDto;
 import com.stockmanager.stockmanager_be.dto.ProductUpdateDto;
@@ -17,6 +18,8 @@ public interface ProductMapper {
     @Mapping(target = "category", ignore = true)
     Product toProduct(ProductCreateDto productCreateDto);
     ProductCreateDto toProductCreateDto(Product product);
+
+    Product toProductFromBulkDto(ProductBulkDto productBulkDto);
 
     // For update - update existing entity
     @Mapping(target = "category", ignore = true)
