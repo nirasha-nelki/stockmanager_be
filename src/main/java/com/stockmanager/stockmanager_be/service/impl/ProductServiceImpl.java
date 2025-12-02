@@ -137,18 +137,29 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductResponseDto> getProductsPaginated(int page, int size) {
+    public Page<ProductResponseDto> getProductsPaginated(int page, int size, int categoryId, int status) {
         PageRequest pageable = PageRequest.of(page, size);
-        Optional<Category> categoryOpt = Optional.empty();
-        Page<Product> productPage = productRepo.findAll(pageable);
 
-        Page<ProductResponseDto> pageableResponse = productPage.map(productMapper::toProductResponseDto);
-        for (ProductResponseDto dto : pageableResponse) {
-            categoryOpt = categoryRepo.findById(dto.getCategoryId());
-            categoryOpt.ifPresent(category -> dto.setCategoryName(category.getName()));
-        }
+        Page<ProductResponseDto> responseDto = productRepo.findProductsFiltered(categoryId, status, pageable);
 
-        return pageableResponse;
+        System.out.println("Paginated products fetched: " + responseDto.getTotalElements());
 
+        return responseDto;
     }
+
+//    @Override
+//    public Page<ProductResponseDto> getProductsPaginated(int page, int size, int categoryId, int status) {
+//        PageRequest pageable = PageRequest.of(page, size);
+//        Optional<Category> categoryOpt = Optional.empty();
+//        Page<Product> productPage = productRepo.findAll(pageable);
+//
+//        Page<ProductResponseDto> pageableResponse = productPage.map(productMapper::toProductResponseDto);
+//        for (ProductResponseDto dto : pageableResponse) {
+//            categoryOpt = categoryRepo.findById(dto.getCategoryId());
+//            categoryOpt.ifPresent(category -> dto.setCategoryName(category.getName()));
+//        }
+//
+//        return pageableResponse;
+//
+//    }
 }

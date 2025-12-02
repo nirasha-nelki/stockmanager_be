@@ -4,6 +4,7 @@ import com.stockmanager.stockmanager_be.dto.ProductBulkDto;
 import com.stockmanager.stockmanager_be.dto.ProductCreateDto;
 import com.stockmanager.stockmanager_be.dto.ProductResponseDto;
 import com.stockmanager.stockmanager_be.dto.ProductUpdateDto;
+import com.stockmanager.stockmanager_be.entity.Product;
 import com.stockmanager.stockmanager_be.service.impl.ProductServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -68,11 +69,22 @@ public class ProductController {
         }
 
     }
+//
+//    @GetMapping("/paginated")
+//    public ResponseEntity<?> paginatedProducts(@RequestParam int page, @RequestParam int size) {
+//        try {
+//            Page<ProductResponseDto> productResponseDtoList = productServiceImpl.getProductsPaginated(page, size);
+//            return new ResponseEntity<>(productResponseDtoList, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
 
     @GetMapping("/paginated")
-    public ResponseEntity<?> paginatedProducts(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<?> paginatedProducts(@RequestParam int page, @RequestParam int size, @RequestParam int categoryId, @RequestParam int status) {
         try {
-            Page<ProductResponseDto> productResponseDtoList = productServiceImpl.getProductsPaginated(page, size);
+            Page<ProductResponseDto> productResponseDtoList = productServiceImpl.getProductsPaginated(page, size, categoryId, status);
             return new ResponseEntity<>(productResponseDtoList, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
