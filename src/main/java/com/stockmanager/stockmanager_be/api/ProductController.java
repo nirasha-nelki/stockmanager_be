@@ -1,9 +1,11 @@
 package com.stockmanager.stockmanager_be.api;
 
+import com.stockmanager.stockmanager_be.dto.ProductBulkDto;
 import com.stockmanager.stockmanager_be.dto.ProductCreateDto;
 import com.stockmanager.stockmanager_be.dto.ProductResponseDto;
 import com.stockmanager.stockmanager_be.dto.ProductUpdateDto;
 import com.stockmanager.stockmanager_be.service.impl.ProductServiceImpl;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +36,10 @@ public class ProductController {
     }
 
     @PostMapping(value = "/add_product_list", consumes = "application/json")
-    public ResponseEntity<?> addProductList(@RequestBody List<ProductCreateDto> productCreateDtoList) {
+    public ResponseEntity<?> addProductList(@RequestBody List<ProductBulkDto> productBulkDtoList) {
 
         try {
-            int result = productServiceImpl.saveProductList(productCreateDtoList);
+            int result = productServiceImpl.saveProductList(productBulkDtoList);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,6 +67,16 @@ public class ProductController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<?> paginatedProducts(@RequestParam int page, @RequestParam int size) {
+        try {
+            Page<ProductResponseDto> productResponseDtoList = productServiceImpl.getProductsPaginated(page, size);
+            return new ResponseEntity<>(productResponseDtoList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/update_product/{productId}")
