@@ -69,6 +69,17 @@ public class ProductController {
         }
 
     }
+
+    @GetMapping("/low_stock")
+    public ResponseEntity<?> getLowStockProducts(@RequestParam int page, @RequestParam int size) {
+        try {
+            Page<ProductResponseDto> productResponseDtoList = productServiceImpl.getLowStockProducts(page, size);
+            return new ResponseEntity<>(productResponseDtoList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 //
 //    @GetMapping("/paginated")
 //    public ResponseEntity<?> paginatedProducts(@RequestParam int page, @RequestParam int size) {

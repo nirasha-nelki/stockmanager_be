@@ -18,4 +18,6 @@ public interface ProductService {
     int deleteProduct(int productId);
     int saveProductList(List<ProductBulkDto> productBulkDtoList);
     Page<ProductResponseDto> getProductsPaginated(int page, int size, int categoryId, int status);
+    Page<ProductResponseDto> getLowStockProducts(int page, int size);
+//    List<ProductResponseDto> getRecentlyAddedProducts(int count);
 }

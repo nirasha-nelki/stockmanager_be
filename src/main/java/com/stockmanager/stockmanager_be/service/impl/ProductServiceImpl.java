@@ -147,6 +147,20 @@ public class ProductServiceImpl implements ProductService {
         return responseDto;
     }
 
+    @Override
+    public Page<ProductResponseDto> getLowStockProducts(int page, int size) {
+        try {
+            PageRequest pageable = PageRequest.of(page, size);
+            Page<ProductResponseDto> responseDto = productRepo.findLowStockProducts(pageable);
+
+            System.out.println("Low stock products fetched: " + responseDto.getTotalElements());
+
+            return responseDto;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get low stock products " + e.getMessage() );
+        }
+    }
+
 //    @Override
 //    public Page<ProductResponseDto> getProductsPaginated(int page, int size, int categoryId, int status) {
 //        PageRequest pageable = PageRequest.of(page, size);

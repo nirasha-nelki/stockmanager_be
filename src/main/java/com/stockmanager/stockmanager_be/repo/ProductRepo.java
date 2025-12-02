@@ -37,5 +37,15 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
             Pageable pageable
     );
 
+    @Query(value = """
+        SELECT p.product_id, p.SKU, p.name, p.price, p.quantity, p.supplier, 
+               p.category_id, c.name, p.last_restocked
+        FROM Product p
+        JOIN Category c ON p.category_id = c.category_id
+        WHERE p.quantity BETWEEN 0 AND 10
+        ORDER BY p.product_id
+        """, nativeQuery = true)
+Page<ProductResponseDto> findLowStockProducts(Pageable pageable);
+
 
 }
