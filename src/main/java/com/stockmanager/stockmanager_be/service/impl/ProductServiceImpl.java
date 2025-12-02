@@ -10,8 +10,11 @@ import com.stockmanager.stockmanager_be.repo.CategoryRepo;
 import com.stockmanager.stockmanager_be.repo.ProductRepo;
 import com.stockmanager.stockmanager_be.service.CategoryService;
 import com.stockmanager.stockmanager_be.service.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -131,5 +134,21 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to save products " + e.getMessage() );
         }
+    }
+
+    @Override
+    public Page<ProductResponseDto> getProductsPaginated(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        Optional<Category> categoryOpt = Optional.empty();
+        Page<Product> productPage = productRepo.findAll(pageable);
+
+        Page<ProductResponseDto> pageableResponse = productPage.map(productMapper::toProductResponseDto);
+        for (ProductResponseDto dto : pageableResponse) {
+            categoryOpt = categoryRepo.findById(dto.getCategoryId());
+            categoryOpt.ifPresent(category -> dto.setCategoryName(category.getName()));
+        }
+
+        return pageableResponse;
+
     }
 }
