@@ -1,6 +1,7 @@
 package com.stockmanager.stockmanager_be.repo;
 
-import com.stockmanager.stockmanager_be.dto.ProductResponseDto;
+import com.stockmanager.stockmanager_be.dto.ProductCategoryDto;
+import com.stockmanager.stockmanager_be.dto.response.ProductResponseDto;
 import com.stockmanager.stockmanager_be.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @EnableJpaRepositories
@@ -46,6 +49,17 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
         ORDER BY p.product_id
         """, nativeQuery = true)
 Page<ProductResponseDto> findLowStockProducts(Pageable pageable);
+
+    @Query(value = """
+    SELECT c.category_id,
+           c.name AS categoryName,
+           CAST(SUM(p.quantity) AS signed) AS noProducts,
+           CAST(SUM(p.price * p.quantity) AS decimal(15,2)) AS totalValue
+    FROM Category c
+    LEFT JOIN Product p ON c.category_id = p.category_id
+    GROUP BY c.category_id, c.name
+""", nativeQuery = true)
+    List<ProductCategoryDto> getProductCategoryInfo();
 
 
 }

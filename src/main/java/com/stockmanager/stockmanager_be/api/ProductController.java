@@ -1,10 +1,9 @@
 package com.stockmanager.stockmanager_be.api;
 
-import com.stockmanager.stockmanager_be.dto.ProductBulkDto;
-import com.stockmanager.stockmanager_be.dto.ProductCreateDto;
-import com.stockmanager.stockmanager_be.dto.ProductResponseDto;
-import com.stockmanager.stockmanager_be.dto.ProductUpdateDto;
-import com.stockmanager.stockmanager_be.entity.Product;
+import com.stockmanager.stockmanager_be.constant.ApiUriConstants;
+import com.stockmanager.stockmanager_be.dto.*;
+import com.stockmanager.stockmanager_be.dto.request.ProductCreateDto;
+import com.stockmanager.stockmanager_be.dto.response.ProductResponseDto;
 import com.stockmanager.stockmanager_be.service.impl.ProductServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,7 @@ public class ProductController {
         this.productServiceImpl = productServiceImpl;
     }
 
-    @PostMapping(value = "/add_product", consumes = "application/json")
+    @PostMapping(value = ApiUriConstants.PRODUCT_ADD, consumes = "application/json")
     public ResponseEntity<?> addProduct(@RequestBody ProductCreateDto productCreateDto) {
 
 
@@ -36,7 +35,7 @@ public class ProductController {
 
     }
 
-    @PostMapping(value = "/add_product_list", consumes = "application/json")
+    @PostMapping(value = ApiUriConstants.PRODUCT_LIST_ADD, consumes = "application/json")
     public ResponseEntity<?> addProductList(@RequestBody List<ProductBulkDto> productBulkDtoList) {
 
         try {
@@ -48,7 +47,7 @@ public class ProductController {
 
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping(ApiUriConstants.PRODUCT_GET)
     public ResponseEntity<?> getProduct(@PathVariable int productId) {
         try{
             ProductResponseDto productResponseDto = productServiceImpl.getProductById(productId);
@@ -58,7 +57,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/get_all")
+    @GetMapping(ApiUriConstants.PRODUCTS_GET_ALL)
     public ResponseEntity<?> getAllProducts(){
 
         try {
@@ -70,11 +69,22 @@ public class ProductController {
 
     }
 
-    @GetMapping("/low_stock")
+    @GetMapping(ApiUriConstants.PRODUCT_LOW_STOCK)
     public ResponseEntity<?> getLowStockProducts(@RequestParam int page, @RequestParam int size) {
         try {
             Page<ProductResponseDto> productResponseDtoList = productServiceImpl.getLowStockProducts(page, size);
             return new ResponseEntity<>(productResponseDtoList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(ApiUriConstants.PRODUCTS_CATEGORY)
+    public ResponseEntity<?> getProductCategoryInfo(){
+        try{
+            List<ProductCategoryDto> productCategoryDtoList = productServiceImpl.getProductCategoriesWithCounts();
+            return new ResponseEntity<>(productCategoryDtoList, HttpStatus.OK);
+
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -92,7 +102,7 @@ public class ProductController {
 //    }
 
 
-    @GetMapping("/paginated")
+    @GetMapping(ApiUriConstants.PRODUCTS_PAGINATED)
     public ResponseEntity<?> paginatedProducts(@RequestParam int page, @RequestParam int size, @RequestParam int categoryId, @RequestParam int status) {
         try {
             Page<ProductResponseDto> productResponseDtoList = productServiceImpl.getProductsPaginated(page, size, categoryId, status);
@@ -102,7 +112,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/update_product/{productId}")
+    @PutMapping(ApiUriConstants.PRODUCT_UPDATE)
     public ResponseEntity<?> updateProduct(@PathVariable int productId, @RequestBody ProductUpdateDto productUpdateDto) {
         try {
 
@@ -113,7 +123,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/delete_product/{productId}")
+    @DeleteMapping(ApiUriConstants.PRODUCT_DELETE)
     public ResponseEntity<?> deleteProduct(@PathVariable int productId){
         try{
             int results = productServiceImpl.deleteProduct(productId);

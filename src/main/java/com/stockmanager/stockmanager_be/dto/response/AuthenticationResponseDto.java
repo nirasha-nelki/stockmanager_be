@@ -1,4 +1,4 @@
-package com.stockmanager.stockmanager_be.dto;
+package com.stockmanager.stockmanager_be.dto.response;
 
 public class AuthenticationResponseDto {
 

@@ -1,18 +1,13 @@
 package com.stockmanager.stockmanager_be.api;
 
-import com.stockmanager.stockmanager_be.dto.AuthenticationRequestDto;
-import com.stockmanager.stockmanager_be.dto.AuthenticationResponseDto;
-import com.stockmanager.stockmanager_be.dto.UserRequestDto;
-import com.stockmanager.stockmanager_be.dto.UserResponseDto;
-import com.stockmanager.stockmanager_be.service.CustomUserDetailsService;
+import com.stockmanager.stockmanager_be.constant.ApiUriConstants;
+import com.stockmanager.stockmanager_be.dto.request.AuthenticationRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.AuthenticationResponseDto;
+import com.stockmanager.stockmanager_be.dto.request.UserRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.UserResponseDto;
 import com.stockmanager.stockmanager_be.service.impl.UserServiceImpl;
-import com.stockmanager.stockmanager_be.util.JWTUtil;
-import io.jsonwebtoken.Jwts;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +25,7 @@ public class AuthController {
 
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = ApiUriConstants.AUTH_SIGN_UP)
     public ResponseEntity<?> registerUser(@RequestBody UserRequestDto userRequestDto) {
 
         try {
@@ -41,7 +36,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping(ApiUriConstants.AUTH_LOGIN)
     public ResponseEntity<?> userLogin(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
 
         try {

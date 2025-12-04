@@ -1,23 +1,18 @@
 package com.stockmanager.stockmanager_be.service.impl;
 
-import com.stockmanager.stockmanager_be.dto.AuthenticationRequestDto;
-import com.stockmanager.stockmanager_be.dto.AuthenticationResponseDto;
-import com.stockmanager.stockmanager_be.dto.UserRequestDto;
-import com.stockmanager.stockmanager_be.dto.UserResponseDto;
+import com.stockmanager.stockmanager_be.dto.request.AuthenticationRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.AuthenticationResponseDto;
+import com.stockmanager.stockmanager_be.dto.request.UserRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.UserResponseDto;
 import com.stockmanager.stockmanager_be.entity.User;
 import com.stockmanager.stockmanager_be.mapper.UserMapper;
 import com.stockmanager.stockmanager_be.repo.UserRepo;
-import com.stockmanager.stockmanager_be.service.CustomUserDetailsService;
 import com.stockmanager.stockmanager_be.service.UserService;
 import com.stockmanager.stockmanager_be.util.JWTUtil;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

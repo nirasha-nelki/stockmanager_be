@@ -1,6 +1,9 @@
 package com.stockmanager.stockmanager_be.service.impl;
 
+import com.stockmanager.stockmanager_be.constant.CommonMessageConstant;
 import com.stockmanager.stockmanager_be.dto.*;
+import com.stockmanager.stockmanager_be.dto.request.ProductCreateDto;
+import com.stockmanager.stockmanager_be.dto.response.ProductResponseDto;
 import com.stockmanager.stockmanager_be.entity.Category;
 import com.stockmanager.stockmanager_be.entity.Product;
 import com.stockmanager.stockmanager_be.exception.CategoryNotFoundException;
@@ -8,16 +11,13 @@ import com.stockmanager.stockmanager_be.exception.ProductNotFoundException;
 import com.stockmanager.stockmanager_be.mapper.ProductMapper;
 import com.stockmanager.stockmanager_be.repo.CategoryRepo;
 import com.stockmanager.stockmanager_be.repo.ProductRepo;
-import com.stockmanager.stockmanager_be.service.CategoryService;
 import com.stockmanager.stockmanager_be.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productMapper.toProduct(productCreateDto);
 
         Category category = categoryRepo.findById(productCreateDto.getCategoryId())
-                        .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+                        .orElseThrow(() -> new CategoryNotFoundException(CommonMessageConstant.COMMON_ERROR_CATEGORY_NOT_FOUND));
         product.setCategory(category);
 
         Product saved = productRepo.save(product);
@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
             productMapper.updateProductFromDto(productUpdateDto, product);
 
             Category category = categoryRepo.findById(productUpdateDto.getCategoryId())
-                    .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+                    .orElseThrow(() -> new CategoryNotFoundException(CommonMessageConstant.COMMON_ERROR_CATEGORY_NOT_FOUND));
             product.setCategory(category);
 
             Product updatedProduct = productRepo.save(product);
@@ -123,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
 
                 product = productMapper.toProductFromBulkDto(productBulkDto);
                 category = categoryRepo.findByName(productBulkDto.getCategoryName())
-                        .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+                        .orElseThrow(() -> new CategoryNotFoundException(CommonMessageConstant.COMMON_ERROR_CATEGORY_NOT_FOUND));
                 product.setCategory(category);
 
                 productRepo.save(product);
@@ -158,6 +158,21 @@ public class ProductServiceImpl implements ProductService {
             return responseDto;
         } catch (Exception e) {
             throw new RuntimeException("Failed to get low stock products " + e.getMessage() );
+        }
+    }
+
+    @Override
+    public List<ProductCategoryDto> getProductCategoriesWithCounts() {
+        try {
+            List<ProductCategoryDto> productCategoryDtoList = productRepo.getProductCategoryInfo();
+            for (ProductCategoryDto productCategoryDto : productCategoryDtoList) {
+                System.out.println("Category: " + productCategoryDto.getCategoryName() +
+                        ", No. of Products: " + productCategoryDto.getNoProducts() +
+                        ", Total Value: " + productCategoryDto.getTotalValue());
+            }
+            return productCategoryDtoList;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get product category info " + e.getMessage() );
         }
     }
 

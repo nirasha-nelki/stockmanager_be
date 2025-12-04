@@ -1,10 +1,6 @@
 package com.stockmanager.stockmanager_be.api;
 
-import com.stockmanager.stockmanager_be.dto.UserRequestDto;
-import com.stockmanager.stockmanager_be.dto.UserResponseDto;
 import com.stockmanager.stockmanager_be.service.impl.UserServiceImpl;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
