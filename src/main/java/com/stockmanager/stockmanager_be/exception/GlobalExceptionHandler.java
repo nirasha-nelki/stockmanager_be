@@ -20,6 +20,18 @@ public class GlobalExceptionHandler {
     private final MessageUtil messageUtil;
     private final HttpServletRequest request;
 
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ResponseEntityDto> handleProductNotFoundException(ProductNotFoundException e) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        String message = messageUtil.getMessage(CommonMessageConstant.COMMON_ERROR_PRODUCT_NOT_FOUND);
+        log.error(message, e);
+
+        return new ResponseEntity<>(
+                new ResponseEntityDto(ResponseStatus.UNSUCCESSFUL, message), status
+        );
+    }
+
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<ResponseEntityDto> handleCategoryNotFoundException(CategoryNotFoundException e) {
 

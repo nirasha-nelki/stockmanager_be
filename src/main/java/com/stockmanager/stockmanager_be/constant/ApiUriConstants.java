@@ -17,7 +17,7 @@ public class ApiUriConstants {
     public static final String CATEGORY_DELETE = "/delete/{id}";
 
     public static final String PRODUCT_ADD = "/add_product";
-    public static final String PRODUCT_LIST_ADD = "/add_products_list";
+    public static final String PRODUCT_LIST_ADD = "/add_product_list";
     public static final String PRODUCT_GET = "/{productId}";
     public static final String PRODUCTS_GET_ALL = "/get_all";
     public static final String PRODUCT_LOW_STOCK = "/low_stock";

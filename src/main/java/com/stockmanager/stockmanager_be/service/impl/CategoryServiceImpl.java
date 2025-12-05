@@ -11,6 +11,7 @@ import com.stockmanager.stockmanager_be.mapper.CategoryMapper;
 import com.stockmanager.stockmanager_be.repo.CategoryRepo;
 import com.stockmanager.stockmanager_be.service.CategoryService;
 import com.stockmanager.stockmanager_be.type.ResponseStatus;
+import com.stockmanager.stockmanager_be.util.MessageUtil;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +24,22 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepo categoryRepo;
     private final CategoryMapper categoryMapper;
+    private final MessageUtil messageUtil;
 
-    public CategoryServiceImpl(CategoryRepo categoryRepo, CategoryMapper categoryMapper) {
+
+    public CategoryServiceImpl(CategoryRepo categoryRepo, CategoryMapper categoryMapper, MessageUtil messageUtil) {
         this.categoryRepo = categoryRepo;
         this.categoryMapper = categoryMapper;
+        this.messageUtil = messageUtil;
     }
 
     @Override
     public ResponseEntityDto createCategory(CategoryRequestDto categoryRequestDto) {
+        String message = messageUtil.getMessage(CommonMessageConstant.COMMON_SUCCESS_CATEGORY_CREATED);
+
         Category category = categoryMapper.toCategory(categoryRequestDto);
         Category savedCategory = categoryRepo.save(category);
-        return new ResponseEntityDto(ResponseStatus.SUCCESSFUL,"Category created successfully", categoryMapper.toCategoryResponseDto(savedCategory));
+        return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, message, categoryMapper.toCategoryResponseDto(savedCategory));
     }
 
     @Override
@@ -43,32 +49,35 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseEntityDto deleteCategory(Integer categoryId) {
+        String message = messageUtil.getMessage(CommonMessageConstant.COMMON_SUCCESS_CATEGORY_DELETED);
         if (!categoryRepo.existsById(categoryId)) {
             throw new CategoryNotFoundException(CommonMessageConstant.COMMON_ERROR_CATEGORY_NOT_FOUND);
         }
         categoryRepo.deleteById(categoryId);
-        return new ResponseEntityDto(ResponseStatus.SUCCESSFUL,"Category deleted successfully");
+        return new ResponseEntityDto(ResponseStatus.SUCCESSFUL,message);
     }
 
     @Override
     public ResponseEntityDto getCategoryById(Integer categoryId) {
 
+        String message = messageUtil.getMessage(CommonMessageConstant.COMMON_SUCCESS_DATA_RETRIEVED);
         Optional<Category> category = categoryRepo.findById(categoryId);
         if (category.isEmpty()){
             throw new CategoryNotFoundException(CommonMessageConstant.COMMON_ERROR_CATEGORY_NOT_FOUND);
         }
         CategoryResponseDto categoryResponseDto = categoryMapper.toCategoryResponseDto(category.get());
-        return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, "Category fetched successfully", categoryResponseDto);
+        return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, message, categoryResponseDto);
     }
 
     @Override
     public ResponseEntityDto getAllCategories() {
+        String message = messageUtil.getMessage(CommonMessageConstant.COMMON_SUCCESS_LIST_RETRIEVED);
         List<CategoryResponseDto> categoryList = categoryRepo.findAll()
                 .stream()
                 .map(categoryMapper::toCategoryResponseDto)
                 .toList();
 
-        return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, "Categories fetched successfully", categoryList);
+        return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, message, categoryList);
 
     }
 
