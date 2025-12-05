@@ -17,7 +17,11 @@ public enum CommonMessageConstant implements MessageConstant{
     COMMON_SUCCESS_PRODUCT_UPDATED("common.success.product.updated"),
     COMMON_SUCCESS_PRODUCT_DELETED("common.success.product.deleted"),
     COMMON_ERROR_PRODUCT_NOT_FOUND("common.error.product.not.found"),
-    COMMON_ERROR_PRODUCT_ALREADY_EXISTS("common.error.product.alreadyExists");
+    COMMON_ERROR_PRODUCT_ALREADY_EXISTS("common.error.product.alreadyExists"),
+    COMMON_ERROR_USER_ALREADY_EXISTS("common.error.user.already.exists"),
+    COMMON_ERROR_USER_NOT_FOUND("common.error.user.not.found"),
+    COMMON_SUCCESS_USER_REGISTERED("common.success.user.created"),
+    COMMON_SUCCESS_USER_AUTHENTICATED("common.success.user.authenticated");
 
 
 

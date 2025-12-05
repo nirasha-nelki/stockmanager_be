@@ -4,6 +4,7 @@ import com.stockmanager.stockmanager_be.constant.ApiUriConstants;
 import com.stockmanager.stockmanager_be.dto.request.AuthenticationRequestDto;
 import com.stockmanager.stockmanager_be.dto.response.AuthenticationResponseDto;
 import com.stockmanager.stockmanager_be.dto.request.UserRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.ResponseEntityDto;
 import com.stockmanager.stockmanager_be.dto.response.UserResponseDto;
 import com.stockmanager.stockmanager_be.service.impl.UserServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -27,25 +28,14 @@ public class AuthController {
 
     @PostMapping(value = ApiUriConstants.AUTH_SIGN_UP)
     public ResponseEntity<?> registerUser(@RequestBody UserRequestDto userRequestDto) {
-
-        try {
-            UserResponseDto userResponseDto = userServiceImpl.registerUser(userRequestDto);
-            return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        ResponseEntityDto responseEntityDto = userServiceImpl.registerUser(userRequestDto);
+        return new ResponseEntity<>(responseEntityDto, HttpStatus.CREATED);
     }
 
     @PostMapping(ApiUriConstants.AUTH_LOGIN)
     public ResponseEntity<?> userLogin(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
-
-        try {
-            AuthenticationResponseDto authenticationResponseDto = userServiceImpl.authenticateUser(authenticationRequestDto);
-            return new ResponseEntity<>(authenticationResponseDto, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+        ResponseEntityDto responseEntityDto = userServiceImpl.authenticateUser(authenticationRequestDto);
+        return new ResponseEntity<>(responseEntityDto, HttpStatus.OK);
 
 
     }

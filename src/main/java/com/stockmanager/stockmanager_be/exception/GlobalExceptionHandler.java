@@ -56,5 +56,29 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(DuplicateEntityException.class)
+    public ResponseEntity<ResponseEntityDto> handleDuplicateEntityException(DuplicateEntityException e) {
+
+        HttpStatus status = HttpStatus.CONFLICT;
+        String message = messageUtil.getMessage(CommonMessageConstant.COMMON_ERROR_USER_ALREADY_EXISTS);
+        log.error(message, e);
+
+        return new ResponseEntity<>(
+                new ResponseEntityDto(ResponseStatus.UNSUCCESSFUL, message), status
+        );
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ResponseEntityDto> handleValidationException(ValidationException e) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String message = messageUtil.getMessage(CommonMessageConstant.COMMON_ERROR_USER_NOT_FOUND);
+        log.error(message, e);
+
+        return new ResponseEntity<>(
+                new ResponseEntityDto(ResponseStatus.UNSUCCESSFUL, message), status
+        );
+    }
+
 
 }
