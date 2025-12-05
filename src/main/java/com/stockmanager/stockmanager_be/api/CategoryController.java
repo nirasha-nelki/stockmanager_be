@@ -1,9 +1,13 @@
 package com.stockmanager.stockmanager_be.api;
 
-import com.stockmanager.stockmanager_be.dto.CategoryRequestDto;
-import com.stockmanager.stockmanager_be.dto.CategoryResponseDto;
+import com.stockmanager.stockmanager_be.constant.ApiUriConstants;
+import com.stockmanager.stockmanager_be.dto.request.CategoryRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.CategoryResponseDto;
+import com.stockmanager.stockmanager_be.dto.response.ResponseEntityDto;
 import com.stockmanager.stockmanager_be.exception.CategoryNotFoundException;
 import com.stockmanager.stockmanager_be.service.impl.CategoryServiceImpl;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToUrl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,45 +21,27 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PostMapping("/add_category")
-    public ResponseEntity<?> createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
-        try{
-            CategoryResponseDto categoryResponseDto = categoryService.createCategory(categoryRequestDto);
-            return ResponseEntity.ok(categoryResponseDto);
-//            return ResponseEntity.ok(categoryService.createCategory(categoryRequestDto));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+    @PostMapping(ApiUriConstants.CATEGORY_ADD)
+    public ResponseEntity<ResponseEntityDto> createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
+        ResponseEntityDto responseEntityDto = categoryService.createCategory(categoryRequestDto);
+        return new ResponseEntity<>(responseEntityDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getACategory(@PathVariable int id) {
-        try {
-            CategoryResponseDto categoryResponseDto = categoryService.getCategoryById(id);
-            return ResponseEntity.ok(categoryResponseDto);
-        } catch (CategoryNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+    @GetMapping(ApiUriConstants.CATEGORY_GET)
+    public ResponseEntity<ResponseEntityDto> getACategory(@PathVariable int id) {
+        ResponseEntityDto responseEntityDto = categoryService.getCategoryById(id);
+        return new ResponseEntity<>(responseEntityDto, HttpStatus.OK);
     }
 
-    @GetMapping("/get_all")
-    public ResponseEntity<?> getAllCategories() {
-        try {
-            return ResponseEntity.ok(categoryService.getAllCategories());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+    @GetMapping(ApiUriConstants.CATEGORY_GET_ALL)
+    public ResponseEntity<ResponseEntityDto> getAllCategories() {
+        ResponseEntityDto responseEntityDto = categoryService.getAllCategories();
+        return new ResponseEntity<>(responseEntityDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable int id) {
-        try {
-            categoryService.deleteCategory(id);
-            return ResponseEntity.ok("Category deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+    @DeleteMapping(ApiUriConstants.CATEGORY_DELETE)
+    public ResponseEntity<ResponseEntityDto> deleteCategory(@PathVariable int id) {
+      ResponseEntityDto responseEntityDto = categoryService.deleteCategory(id);
+        return new ResponseEntity<>(responseEntityDto, HttpStatus.OK);
     }
 }

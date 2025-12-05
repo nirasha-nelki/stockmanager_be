@@ -1,6 +1,5 @@
-package com.stockmanager.stockmanager_be.dto;
+package com.stockmanager.stockmanager_be.dto.response;
 
-import com.stockmanager.stockmanager_be.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

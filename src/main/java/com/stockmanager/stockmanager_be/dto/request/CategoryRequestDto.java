@@ -1,4 +1,4 @@
-package com.stockmanager.stockmanager_be.dto;
+package com.stockmanager.stockmanager_be.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryResponseDto {
-    private int categoryId;
+public class CategoryRequestDto {
     private String name;
 }

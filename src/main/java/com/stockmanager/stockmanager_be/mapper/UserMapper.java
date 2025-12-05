@@ -1,7 +1,7 @@
 package com.stockmanager.stockmanager_be.mapper;
 
-import com.stockmanager.stockmanager_be.dto.UserRequestDto;
-import com.stockmanager.stockmanager_be.dto.UserResponseDto;
+import com.stockmanager.stockmanager_be.dto.request.UserRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.UserResponseDto;
 import com.stockmanager.stockmanager_be.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

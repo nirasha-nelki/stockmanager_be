@@ -1,23 +1,24 @@
 package com.stockmanager.stockmanager_be.service.impl;
 
-import com.stockmanager.stockmanager_be.dto.AuthenticationRequestDto;
-import com.stockmanager.stockmanager_be.dto.AuthenticationResponseDto;
-import com.stockmanager.stockmanager_be.dto.UserRequestDto;
-import com.stockmanager.stockmanager_be.dto.UserResponseDto;
+import com.stockmanager.stockmanager_be.constant.CommonMessageConstant;
+import com.stockmanager.stockmanager_be.dto.request.AuthenticationRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.AuthenticationResponseDto;
+import com.stockmanager.stockmanager_be.dto.request.UserRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.ResponseEntityDto;
+import com.stockmanager.stockmanager_be.dto.response.UserResponseDto;
 import com.stockmanager.stockmanager_be.entity.User;
+import com.stockmanager.stockmanager_be.exception.DuplicateEntityException;
+import com.stockmanager.stockmanager_be.exception.ValidationException;
 import com.stockmanager.stockmanager_be.mapper.UserMapper;
 import com.stockmanager.stockmanager_be.repo.UserRepo;
-import com.stockmanager.stockmanager_be.service.CustomUserDetailsService;
 import com.stockmanager.stockmanager_be.service.UserService;
+import com.stockmanager.stockmanager_be.type.ResponseStatus;
 import com.stockmanager.stockmanager_be.util.JWTUtil;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.stockmanager.stockmanager_be.util.MessageUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,53 +33,44 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsServiceImpl customUserDetailsService;
     private final JWTUtil jwtUtil;
+    private final MessageUtil messageUtil;
 
-    UserServiceImpl(UserRepo userRepo, UserMapper userMapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, CustomUserDetailsServiceImpl customUserDetailsService, JWTUtil jwtUtil) {
+    UserServiceImpl(UserRepo userRepo, UserMapper userMapper, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, CustomUserDetailsServiceImpl customUserDetailsService, JWTUtil jwtUtil, MessageUtil messageUtil) {
         this.userRepo = userRepo;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.customUserDetailsService = customUserDetailsService;
         this.jwtUtil = jwtUtil;
+        this.messageUtil = messageUtil;
     }
 
     @Override
-    public UserResponseDto registerUser(UserRequestDto userRequestDto) {
+    public ResponseEntityDto registerUser(UserRequestDto userRequestDto) {
 
-       try {
-
-           Optional<User> tempUser = userRepo.findByUsername(userRequestDto.getUsername());
+        Optional<User> tempUser = userRepo.findByUsername(userRequestDto.getUsername());
            if (tempUser.isPresent()) {
-               throw new RuntimeException("Username is already in use");
+               throw new DuplicateEntityException(CommonMessageConstant.COMMON_ERROR_USER_ALREADY_EXISTS);
            }
            User user = new User();
            user.setUsername(userRequestDto.getUsername());
            user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
 
            user = userRepo.save(user);
-
-           return userMapper.toUserResponseDto(user);
-       } catch (Exception e) {
-           throw new RuntimeException("Error while registering user " + userRequestDto.getUsername());
-       }
+          UserResponseDto userResponseDto = userMapper.toUserResponseDto(user);
+          String message = messageUtil.getMessage(CommonMessageConstant.COMMON_SUCCESS_USER_REGISTERED);
+          return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, message, userResponseDto);
     }
 
     @Override
-    public AuthenticationResponseDto authenticateUser(AuthenticationRequestDto authenticationRequestDto) {
-
-//        Optional<User> user = userRepo.findByUsername(authenticationRequestDto.getUsername());
-//        if (user.isEmpty()) {
-//            throw new UsernameNotFoundException("Username not found");
-//        }
-//
-//        System.out.println(authenticationRequestDto.getUsername());
+    public ResponseEntityDto authenticateUser(AuthenticationRequestDto authenticationRequestDto) {
 
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequestDto.getUsername(), authenticationRequestDto.getPassword())
             );
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Invalid username or password");
+            throw new ValidationException(CommonMessageConstant.COMMON_ERROR_USER_NOT_FOUND);
         }
 
         // Loading user details for token creation
@@ -87,7 +79,10 @@ public class UserServiceImpl implements UserService {
         // generate JWT
         final String token = jwtUtil.generateToken(userDetails);
 
-        return new AuthenticationResponseDto(token);
+       AuthenticationResponseDto authenticationResponseDto = new AuthenticationResponseDto(token);
+       return new ResponseEntityDto(ResponseStatus.SUCCESSFUL,
+               messageUtil.getMessage(CommonMessageConstant.COMMON_SUCCESS_USER_AUTHENTICATED),
+               authenticationResponseDto);
     }
 
 

@@ -1,17 +1,17 @@
 package com.stockmanager.stockmanager_be.service;
 
-import com.stockmanager.stockmanager_be.dto.CategoryRequestDto;
-import com.stockmanager.stockmanager_be.dto.CategoryResponseDto;
-import com.stockmanager.stockmanager_be.entity.Category;
+import com.stockmanager.stockmanager_be.dto.request.CategoryRequestDto;
+import com.stockmanager.stockmanager_be.dto.response.CategoryResponseDto;
+import com.stockmanager.stockmanager_be.dto.response.ResponseEntityDto;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    CategoryResponseDto createCategory(CategoryRequestDto categoryRequestDto);
+    ResponseEntityDto createCategory(CategoryRequestDto categoryRequestDto);
     CategoryResponseDto updateCategory(CategoryRequestDto categoryRequestDto);
-    void deleteCategory(Integer categoryId);
-    CategoryResponseDto getCategoryById(Integer categoryId);
-    List<CategoryResponseDto> getAllCategories();
+    ResponseEntityDto deleteCategory(Integer categoryId);
+    ResponseEntityDto getCategoryById(Integer categoryId);
+    ResponseEntityDto getAllCategories();
     CategoryResponseDto findCategoryByName(String categoryName);
 }

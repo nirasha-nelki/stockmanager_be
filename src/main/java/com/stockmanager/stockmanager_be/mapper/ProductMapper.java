@@ -1,8 +1,8 @@
 package com.stockmanager.stockmanager_be.mapper;
 
 import com.stockmanager.stockmanager_be.dto.ProductBulkDto;
-import com.stockmanager.stockmanager_be.dto.ProductCreateDto;
-import com.stockmanager.stockmanager_be.dto.ProductResponseDto;
+import com.stockmanager.stockmanager_be.dto.request.ProductCreateDto;
+import com.stockmanager.stockmanager_be.dto.response.ProductResponseDto;
 import com.stockmanager.stockmanager_be.dto.ProductUpdateDto;
 import com.stockmanager.stockmanager_be.entity.Product;
 import org.mapstruct.Mapper;
