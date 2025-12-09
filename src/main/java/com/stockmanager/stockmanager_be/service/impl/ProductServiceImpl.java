@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,18 +55,32 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntityDto updateProduct(ProductUpdateDto productUpdateDto) {
 
+        Product productEntity = new Product();
         Optional<Product> product = productRepo.findById(productUpdateDto.getProductId());
         if (product.isEmpty()){
             throw new ProductNotFoundException(CommonMessageConstant.COMMON_ERROR_PRODUCT_NOT_FOUND);
         }
-        productMapper.updateProductFromDto(productUpdateDto, product.get());
+        productMapper.updateProductFromDto(productUpdateDto, productEntity);
 
         Optional<Category> category = categoryRepo.findById(productUpdateDto.getCategoryId());
         if (category.isEmpty()){
             throw new CategoryNotFoundException(CommonMessageConstant.COMMON_ERROR_CATEGORY_NOT_FOUND);
         }
-        product.get().setCategory(category.get());
-        Product updatedProduct = productRepo.save(product.get());
+        productEntity.setCategory(category.get());
+
+        System.out.println("Existing quantity: " + product.get().getQuantity());
+        System.out.println("Updated quantity: " + productUpdateDto.getQuantity());
+
+        // lastRestockedDate is updated only when stockQuantity is increased
+        if (productUpdateDto.getQuantity() != 0 &&
+                productUpdateDto.getQuantity() > product.get().getQuantity()) {
+            System.out.println("Updating lastRestocked date");
+            productEntity.setLastRestocked(new Timestamp(System.currentTimeMillis()));
+        } else {
+            productEntity.setLastRestocked(product.get().getLastRestocked());
+        }
+
+        Product updatedProduct = productRepo.save(productEntity);
         String message = messageUtil.getMessage(CommonMessageConstant.COMMON_SUCCESS_PRODUCT_UPDATED);
         return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, message, updatedProduct.getProductId());
 
