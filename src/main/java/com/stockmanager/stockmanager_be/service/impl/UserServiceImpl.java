@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
            user = userRepo.save(user);
           UserResponseDto userResponseDto = userMapper.toUserResponseDto(user);
           String message = messageUtil.getMessage(CommonMessageConstant.COMMON_SUCCESS_USER_REGISTERED);
-          return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, message, userResponseDto);
+          return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, message, userResponseDto.getUserId());
     }
 
     @Override

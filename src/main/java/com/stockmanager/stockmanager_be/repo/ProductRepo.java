@@ -50,10 +50,11 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
         """, nativeQuery = true)
 Page<ProductResponseDto> findLowStockProducts(Pageable pageable);
 
+    // noProducts type -> mysql -signed, postgresql - integer
     @Query(value = """
     SELECT c.category_id,
            c.name AS categoryName,
-           CAST(SUM(p.quantity) AS signed) AS noProducts,
+           CAST(SUM(p.quantity) AS integer ) AS noProducts,
            CAST(SUM(p.price * p.quantity) AS decimal(15,2)) AS totalValue
     FROM Category c
     LEFT JOIN Product p ON c.category_id = p.category_id

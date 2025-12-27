@@ -41,10 +41,10 @@ public class Product {
         this.lastRestocked = new Timestamp(System.currentTimeMillis());
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.lastRestocked = new Timestamp(System.currentTimeMillis());
-    }
+//    @PreUpdate
+//    protected void onUpdate() {
+//        this.lastRestocked = new Timestamp(System.currentTimeMillis());
+//    }
 
 
 
