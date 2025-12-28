@@ -1,0 +1,33 @@
+# Application Name
+spring.application.name=stockmanager_be
+
+# Server Configuration
+server.port=8080
+
+# Database Configuration (PostgreSQL)
+# Update with your actual database credentials
+spring.datasource.url=jdbc:postgresql://localhost:5432/stockmanager
+spring.datasource.username=your_database_username
+spring.datasource.password=your_database_password
+
+# Alternative: MySQL Configuration
+# Uncomment and configure if using MySQL instead of PostgreSQL
+# spring.datasource.url=jdbc:mysql://localhost:3306/stockmanager?createDatabaseIfNotExist=true
+# spring.datasource.username=your_database_username
+# spring.datasource.password=your_database_password
+# spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+
+# JPA/Hibernate Configuration
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+
+# Hibernate Performance Optimization
+spring.jpa.properties.hibernate.jdbc.batch_size=50
+spring.jpa.properties.hibernate.order_inserts=true
+spring.jpa.properties.hibernate.order_updates=true
+spring.jpa.properties.hibernate.jdbc.batch_versioned_data=true
+
+# Optional: Uncomment for detailed SQL logging (useful for debugging)
+# spring.jpa.properties.hibernate.format_sql=true
+# spring.jpa.properties.hibernate.use_sql_comments=true

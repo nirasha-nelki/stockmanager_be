@@ -4,6 +4,7 @@ import com.stockmanager.stockmanager_be.constant.CommonMessageConstant;
 import com.stockmanager.stockmanager_be.dto.*;
 import com.stockmanager.stockmanager_be.dto.request.ProductCreateDto;
 import com.stockmanager.stockmanager_be.dto.response.ProductResponseDto;
+import com.stockmanager.stockmanager_be.dto.response.ProductStatisticsDto;
 import com.stockmanager.stockmanager_be.dto.response.ResponseEntityDto;
 import com.stockmanager.stockmanager_be.entity.Category;
 import com.stockmanager.stockmanager_be.entity.Product;
@@ -189,6 +190,23 @@ public class ProductServiceImpl implements ProductService {
 //        } catch (Exception e) {
 //            throw new RuntimeException("Failed to get product category info " + e.getMessage() );
 //        }
+    }
+
+    @Override
+    public ResponseEntityDto getProductStatistics() {
+        int totalProducts = (int) productRepo.count();
+        int lowStockProducts = productRepo.countProductByQuantityLessThan(5);
+        int outOfStockProducts = productRepo.countProductsByQuantityEquals(0);
+        double totalInventoryValue = productRepo.totalInventoryValue() != null ? productRepo.totalInventoryValue() : 0.0;
+        String message = messageUtil.getMessage(CommonMessageConstant.COMMON_SUCCESS_DATA_RETRIEVED);
+        ProductStatisticsDto productStatisticsDto = new ProductStatisticsDto(
+                totalProducts,
+                lowStockProducts,
+                outOfStockProducts,
+                totalInventoryValue
+        );
+        return new ResponseEntityDto(ResponseStatus.SUCCESSFUL, message, productStatisticsDto);
+
     }
 
 }
