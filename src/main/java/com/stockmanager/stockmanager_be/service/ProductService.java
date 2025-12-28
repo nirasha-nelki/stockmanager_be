@@ -20,4 +20,5 @@ public interface ProductService {
     ResponseEntityDto getLowStockProducts(int page, int size);
 //    List<ProductResponseDto> getRecentlyAddedProducts(int count);
     ResponseEntityDto getProductCategoriesWithCounts();
+    ResponseEntityDto getProductStatistics();
 }

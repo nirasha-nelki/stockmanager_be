@@ -59,6 +59,12 @@ public class ProductController {
         return new ResponseEntity<>(responseEntityDto, HttpStatus.OK);
     }
 
+    @GetMapping(ApiUriConstants.PRODUCT_STATISTICS)
+    public ResponseEntity<ResponseEntityDto> getProductStatistics(){
+        ResponseEntityDto responseEntityDto = productServiceImpl.getProductStatistics();
+        return new ResponseEntity<>(responseEntityDto, HttpStatus.OK);
+    }
+
 //
 //    @GetMapping("/paginated")
 //    public ResponseEntity<?> paginatedProducts(@RequestParam int page, @RequestParam int size) {

@@ -62,5 +62,12 @@ Page<ProductResponseDto> findLowStockProducts(Pageable pageable);
 """, nativeQuery = true)
     List<ProductCategoryDto> getProductCategoryInfo();
 
+    Integer countProductByQuantityLessThan(Integer quantity);
+
+    Integer countProductsByQuantityEquals(Integer quantity);
+
+    @Query(value = "SELECT SUM(price * quantity) FROM product", nativeQuery = true)
+    Double totalInventoryValue();
+
 
 }

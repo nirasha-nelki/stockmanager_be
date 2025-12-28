@@ -25,5 +25,7 @@ public class ApiUriConstants {
     public static final String PRODUCTS_PAGINATED = "/paginated";
     public static final String PRODUCT_UPDATE = "/update_product/{productId}";
     public static final String PRODUCT_DELETE = "/delete_product/{productId}";
+    public static final String PRODUCT_STATISTICS = "/statistics";
+
 
 }
