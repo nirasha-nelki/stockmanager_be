@@ -20,9 +20,14 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean package
+      env:
+        SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+        SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+        SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
 
     - name: Run tests
       run: mvn test
+      
 
     - name: Build Docker image
       run: docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-app:latest .
